@@ -1,0 +1,11 @@
+B ../_build/default/geomLib/.geomLib.objs
+B /container/.opam/4.08.1+flambda/lib/cairo2
+B /container/.opam/4.08.1+flambda/lib/gg
+B /container/.opam/4.08.1+flambda/lib/ocaml
+B /container/.opam/4.08.1+flambda/lib/vg
+FLG -open GeomLib -w -40
+S .
+S /container/.opam/4.08.1+flambda/lib/cairo2
+S /container/.opam/4.08.1+flambda/lib/gg
+S /container/.opam/4.08.1+flambda/lib/ocaml
+S /container/.opam/4.08.1+flambda/lib/vg

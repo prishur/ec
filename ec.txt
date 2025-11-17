@@ -1,0 +1,5 @@
+trying with repo ec for dreamcoder
+Why are we doing this? To try a hand with 4.06 itself, as 4.09 was resulting in style errors.
+(dreamcoder-venv) is the venv with python and other things
+ocaml 4.09 seems stable
+

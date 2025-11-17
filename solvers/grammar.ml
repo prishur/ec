@@ -308,7 +308,7 @@ let deserialize_grammar g =
 
 let serialize_grammar {logVariable; continuation_type; library} =
   let open Yojson.Basic in
-  let j : json =
+  let j : Yojson.Basic.t =
   `Assoc(["logVariable",`Float(logVariable);
           "productions",`List(library |> List.map ~f:(fun (e,t,l,_) ->
               `Assoc(["expression",`String(string_of_program e);

@@ -25,6 +25,10 @@
 %token EOF
 
 %start <(Interpreter.shapeprogram) option> program
+%type <Interpreter.shapeprogram> expr
+%type <Interpreter.var> var
+%type <Interpreter.var option> somev
+%type <bool> someb
 %%
 program:
     | EOF

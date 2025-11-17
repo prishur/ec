@@ -348,7 +348,7 @@ let rec deserialize_type j =
 
 let rec serialize_type t =
   let open Yojson.Basic in
-  let j : json =
+  let j : Yojson.Basic.t =
   match t with
   | TID(i) -> `Assoc(["index",`Int(i)])
   | TCon(k,a,_) ->

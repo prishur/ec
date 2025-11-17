@@ -209,7 +209,7 @@ let time_it ?verbose:(verbose=true) description callback =
 let shuffle d = begin
     Random.self_init ();
     let nd = List.map ~f:(fun c -> (Random.bits (), c)) d in
-    let sond = List.sort compare nd in
+    let sond = List.sort ~compare nd in
     List.map ~f:snd sond
   end
 
@@ -354,7 +354,9 @@ let command_output cmd =
   let buf = Buffer.create 16 in
   (try
      while true do
-       Buffer.add_channel buf ic 1
+       match In_channel.input_char ic with
+    	   | Some ch -> Buffer.add_char buf ch
+       | None -> raise End_of_file
      done
    with End_of_file -> ());
   let _ = Unix.close_process (ic, oc) in

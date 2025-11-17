@@ -61,7 +61,7 @@ let output_job ?maxExamples:(maxExamples=50000) result =
       let p = (maxExamples |> Float.of_int)/.(l |> Float.of_int) in
       result |> List.filter ~f:(fun _ -> Random.float 1. < p)
   in
-  let message : json = 
+  let message : Yojson.Basic.t = 
     `List(results |> List.map ~f:(fun (behavior, (l,ps)) ->
         `Assoc([(* "behavior", behavior; *)
                 "ll", `Float(l);

@@ -713,7 +713,7 @@ let export_compression_checkpoint ~nc ~structurePenalty ~aic ~topK ~pseudoCounts
   let open Yojson.Basic.Util in
   let open Yojson.Basic in
 
-  let j : json =
+  let j : Yojson.Basic.t =
     `Assoc(["DSL", serialize_grammar g;
             "topK", `Int(topK);
             "topI", `Int(topI);

@@ -29,7 +29,7 @@ let deserialize_frontier j =
 
 let serialize_frontier f =
   let open Yojson.Basic in
-  let j : json =
+  let j : Yojson.Basic.t =
     `Assoc(["request",serialize_type f.request;
             "programs",`List(f.programs |> List.map ~f:(fun (p,l) ->
                 `Assoc(["program",`String(string_of_program p);

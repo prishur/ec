@@ -174,7 +174,7 @@ let rec unpack x =
     x |> to_list |> List.map ~f:unpack |> magical
   with _ -> raise (Failure "could not unpack")
 
-let rec pack t v : json =
+let rec pack t v : Yojson.Basic.t =
   let open Yojson.Basic.Util in
   match t with
   | TCon("list",[t'],_) -> `List(magical v |> List.map ~f:(pack t'))

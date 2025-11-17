@@ -125,7 +125,7 @@ let load_problems channel =
 let export_frontiers number_enumerated tf solutions : string =
   let open Yojson.Basic.Util in
   let open Yojson.Basic in
-  let serialization : Yojson.Basic.json =
+  let serialization : Yojson.Basic.t =
     `Assoc(("number_enumerated",`Int(number_enumerated)) ::
            List.map2_exn tf solutions ~f:(fun (t,_) ss ->
         (t.name, `List(ss |> List.map ~f:(fun s ->

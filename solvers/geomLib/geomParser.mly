@@ -33,6 +33,26 @@
 %token EOF
 
 %start <(Interpreter.shapeprogram) option> program
+%type <Interpreter.var> expr
+%type <Interpreter.shapeprogram> turn
+%type <Interpreter.shapeprogram> repeat
+%type <Interpreter.shapeprogram> integrate
+
+
+%type <Interpreter.var option> optional_turn_args
+%type <Interpreter.var option> optional_repeat_args
+
+%type <bool option> optional_integrate_pen
+%type <Interpreter.var option> optional_integrate_speed
+%type <Interpreter.var option> optional_integrate_d
+%type <Interpreter.var option> optional_integrate_accel
+%type <Interpreter.var option> optional_integrate_angularSpeed
+%type <Interpreter.var option> optional_integrate_angularAccel
+
+%type <Interpreter.innerValues> optional_integrate_args
+
+%type <unit> optional_comma
+%type <Interpreter.shapeprogram> value
 %%
 program:
     | EOF       { None }
@@ -82,8 +102,8 @@ optional_integrate_args:
         angularSpeed = optional_integrate_angularSpeed ; optional_comma ;
         angularAccel = optional_integrate_angularAccel ;
         END_ARGS
-        {Interpreter.Integrate (d,pen,(speed,accel,angularSpeed,angularAccel))}
-    | { Interpreter.Integrate (None,None,(None,None,None,None)) }
+        { (speed, accel, angularSpeed, angularAccel) }
+	| { (None, None, None, None) }
 optional_integrate_d:
     | ARG_T ; EQUALS ; e = expr { Some e }
     | {None}
@@ -104,8 +124,10 @@ optional_integrate_angularAccel:
     | {None}
 integrate:
     | INTEGRATE ;
-        i = optional_integrate_args { i }
-
+      d = optional_integrate_d ;
+      pen = optional_integrate_pen ;
+      vals = optional_integrate_args
+        { Interpreter.Integrate (d, pen, vals) }
 value:
     | t = turn { t }
     | EMBED ; BEGIN_BLOCK ; p = value ; END_BLOCK {Interpreter.Embed p}

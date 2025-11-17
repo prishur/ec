@@ -1,6 +1,6 @@
 Bootstrap: docker
 
-From: ubuntu
+From: ubuntu:22.04
 
 
 %runscript
@@ -37,17 +37,20 @@ From: ubuntu
     rm ./Miniconda3-py37_4.9.2-Linux-x86_64.sh
     export PATH="/usr/local/conda/bin:$PATH"
 
-    conda install -y  numpy dill pyzmq matplotlib protobuf scikit-learn scipy #vose-alias-method
-    pip install git+https://github.com/MaxHalford/vose
+    #conda install -y  numpy dill pyzmq matplotlib protobuf scikit-learn scipy #vose-alias-method
+    conda install -y numpy=1.19 scipy=1.5 scikit-learn=0.23 matplotlib=3.3 protobuf=3.20 pyzmq=19 dill
+
     pip install dill sexpdata pygame pycairo cairocffi psutil pypng Box2D-kengz graphviz frozendict pathos
     
     conda install pytorch==1.2.0 torchvision==0.4.0 cpuonly -c pytorch
     
-    opam init -y --auto-setup --root /container/.opam
-    opam update
-    opam switch create 4.06.1+flambda
-    eval `opam config env`
-    opam install -y  ppx_jane core re2 yojson vg cairo2 camlimages menhir ocaml-protoc zmq utop jbuilder
+    opam init --disable-sandboxing -y --bare
+    #opam init -y --auto-setup --root /container/.opam
+    #opam update
+    opam switch create 4.08.1+flambda
+    eval $(opam env)
+    opam pin add -y ppx_jane https://github.com/janestreet/ppx_jane.git#v0.12.0
+    opam install -y ppx_jane core re2 yojson vg cairo2 camlimages menhir ocaml-protoc zmq utop jbuilder ocaml-migrate-parsetree.1.7.2
     echo "
 #use "topfind";;
 #thread;;
@@ -70,5 +73,3 @@ open Core;;
     pypy3 -m pip install frozendict
     pypy3 -m pip install numpy
     pypy3 -m pip install pathos
-
-    

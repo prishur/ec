@@ -1,0 +1,86 @@
+Bootstrap: docker
+
+From: ubuntu:18.04
+
+
+%runscript
+	eval `opam config env`
+	if [ $# = 0 ] ; then exec bash; else exec "$@"; fi
+
+
+
+%environment
+
+    HOME=/container
+    export HOME
+    PATH="/usr/local/conda/bin:/container/pypy3.6-v7.3.3-linux64/bin:$PATH"
+    export PATH
+
+
+%labels
+
+   AUTHOR ellisk@mit.edu
+
+
+%post
+
+    apt-get update && apt-get -y install python3 git wget opam m4 libcairo2-dev libzmq3-dev swig graphviz && \
+
+    mkdir /container
+    chmod 777 /container
+    HOME=/container
+    export HOME && \
+    
+    wget https://repo.continuum.io/miniconda/Miniconda3-py37_4.9.2-Linux-x86_64.sh
+    chmod +x Miniconda3-py37_4.9.2-Linux-x86_64.sh
+    ./Miniconda3-py37_4.9.2-Linux-x86_64.sh -b  -p /usr/local/conda
+    rm ./Miniconda3-py37_4.9.2-Linux-x86_64.sh
+    export PATH="/usr/local/conda/bin:$PATH"
+
+    pip install numpy==1.21 dill==0.3.4 pyzmq==22.2 matplotlib==3.3 protobuf==3.20 scikit-learn==0.24 scipy==1.6
+
+    #pip install git+https://github.com/MaxHalford/vose
+    pip install dill sexpdata pygame pycairo cairocffi psutil pypng Box2D-kengz graphviz frozendict pathos
+    
+    conda install pytorch==1.2.0 torchvision==0.4.0 cpuonly -c pytorch
+    
+    apt-get remove -y opam
+	wget https://github.com/ocaml/opam/releases/download/2.1.5/opam-2.1.5-x86_64-linux
+	install opam-2.1.5-x86_64-linux /usr/local/bin/opam
+	
+	opam init -y --disable-sandboxing --auto-setup --root /container/.opam
+    opam switch create 4.07.1+flambda
+    
+    eval $(opam env)
+    opam pin add -y ppx_jane https://github.com/janestreet/ppx_jane.git#v0.12.0
+    opam pin add re2 https://github.com/janestreet/re2.git#v0.12.1
+	
+	opam install -y  ppx_jane core yojson cairo2 camlimages menhir re2 ocaml-protoc zmq jbuilder
+	opam install vg.0.9.4
+	opam install utop.2.9.0
+
+    
+    echo "
+#use "topfind";;
+#thread;;
+#require "core.top";;
+#require "core.syntax";;
+open Core;;
+" >> /container/.ocamlinit
+    echo 'eval `eval $(opam env)`' >> /container/.bashrc  
+
+    wget https://downloads.python.org/pypy/pypy3.6-v7.3.3-linux64.tar.bz2
+    tar xjvf pypy3.6-v7.3.3-linux64.tar.bz2
+    rm pypy3.6-v7.3.3-linux64.tar.bz2
+    mv pypy3.6-v7.3.3-linux64 /container
+    PATH=/container/pypy3.6-v7.3.3-linux64/bin:$PATH
+
+    pypy3 -m ensurepip
+    pypy3 -m pip install vmprof
+    pypy3 -m pip install dill
+    pypy3 -m pip install psutil
+    pypy3 -m pip install frozendict
+    pypy3 -m pip install numpy
+    pypy3 -m pip install pathos
+
+    

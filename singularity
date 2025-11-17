@@ -39,7 +39,7 @@ From: ubuntu:22.04
 
     #conda install -y  numpy dill pyzmq matplotlib protobuf scikit-learn scipy #vose-alias-method
     conda install -y numpy=1.19 scipy=1.5 scikit-learn=0.23 matplotlib=3.3 protobuf=3.20 pyzmq=19 dill
-
+	pip install git+https://github.com/MaxHalford/vose@fae179e5afa45f224204519c10957d087633ae60
     pip install dill sexpdata pygame pycairo cairocffi psutil pypng Box2D-kengz graphviz frozendict pathos
     
     conda install pytorch==1.2.0 torchvision==0.4.0 cpuonly -c pytorch
